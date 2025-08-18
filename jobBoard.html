@@ -22,7 +22,7 @@
             <div class="stats">
                 <div class="stat-item">
                     <strong>Number of jobs:</strong> 14
-                </div>"
+                </div>
                 <div class="stat-item">
                     <strong>Pay range:</strong> Min: $50,000 - Max: $150,000
                 </div>
@@ -102,6 +102,59 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>
+
+<script>
+function parseCSVLine(line) {
+    if (!line.trim()) return []; // skip blank lines
+    return line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g)
+        ?.map(cell => {
+            cell = cell.trim();
+            if (cell.startsWith('"') && cell.endsWith('"')) {
+                cell = cell.slice(1, -1).replace(/""/g, '"');
+            }
+            return cell;
+        }) || [];
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const sheetUrl = "https://docs.google.com/spreadsheets/d/1-LMX_seYzsrZf7XMcsKLqgE5CtX1aAaulRolKSlzt7g/gviz/tq?tqx=out:csv";
+    const tableBody = document.getElementById("jobTableBody");
+
+    fetch(sheetUrl)
+        .then(response => response.text())
+        .then(csv => {
+            const rows = csv
+                .trim()
+                .split(/\r?\n/)
+                .map(parseCSVLine)
+                .filter(row => row.length);
+            rows.shift();
+
+            rows.forEach(row => {
+                if (row.length < 9) return;
+
+                const tr = document.createElement("tr");
+
+                row.forEach((cell, index) => {
+                    const td = document.createElement("td");
+                    if (index === 8 && cell.trim()) { 
+                        const link = document.createElement("a");
+                        link.href = cell.trim();
+                        link.textContent = cell.trim();
+                        link.target = "_blank";
+                        td.appendChild(link);
+                    } else {
+                        td.textContent = cell.trim();
+                    }
+                    tr.appendChild(td);
+                });
+
+                tableBody.appendChild(tr);
+            });
+        })
+        .catch(error => console.error("Error loading sheet:", error));
+});
+</script>

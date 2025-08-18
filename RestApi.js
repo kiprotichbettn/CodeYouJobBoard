@@ -1,4 +1,4 @@
-//function doGet(e) {
+// function doGet(e) {
 
 //    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("JobBoard");
 //    const data = sheet.getDataRange().getValues();
