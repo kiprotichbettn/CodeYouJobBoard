@@ -144,7 +144,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 .map(replaceUnderscoresInRow)
                 .filter(row => row[8].trim().toLowerCase() === "false");
             activeJobs = [...rows];
-            rows.shift();
 
             document.getElementById("job-count").innerText = activeJobs.length;
 
