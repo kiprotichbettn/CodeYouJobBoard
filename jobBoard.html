@@ -93,7 +93,7 @@
                         <th>Contact Person</th>
                         <th>Location</th>
                         <th>Apply</th>
-                        <th>Vacancy</th>
+                        <!-- <th>Vacancy</th> -->
                     </tr>
                 </thead>
                 <tbody id="jobTableBody">
@@ -151,13 +151,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 row.forEach((cell, index) => {
                     const td = document.createElement("td");
-                    if (index === 8 && cell.trim()) {
+                    if (index === 8 && cell.trim().toLowerCase() === "false") {
+                        tr.appendChild(td);
+                        return;
+                    }
+                    else if (index === 8 && cell.trim()) {
                         const link = document.createElement("a");
                         link.href = cell.trim();
                         link.textContent = cell.trim();
                         link.target = "_blank";
                         td.appendChild(link);
-                    } else {
+                    }
+                    else {
                         td.textContent = cell.trim();
                     }
                     tr.appendChild(td);
