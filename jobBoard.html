@@ -251,6 +251,17 @@
         controlsElement.appendChild(pageBtn);
       }
     });
+
+    if (currentPage !== totalPages) {
+      const nextBtn = document.createElement("button");
+      nextBtn.textContent = "Next ▶";
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.onclick = () => {
+        currentPage++;
+        renderTable(tableBody);
+      };
+      controlsElement.appendChild(nextBtn);
+    }
   }
 
   function getPaginationRange(current, total) {
