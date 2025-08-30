@@ -226,6 +226,17 @@
     controlsElement.innerHTML = "";
     if (totalPages <= 1) return;
 
+    if (currentPage !== 1) {
+      const prevBtn = document.createElement("button");
+      prevBtn.textContent = "◀ Prev";
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.onclick = () => {
+        currentPage--;
+        renderTable(tableBody);
+      };
+      controlsElement.appendChild(prevBtn);
+    }
+
     const pageRange = getPaginationRange(currentPage, totalPages);
     pageRange.forEach((p) => {
       if (p === "…") {
