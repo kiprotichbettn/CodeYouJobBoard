@@ -15,8 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     const jobData = await fetchJobData(sheetUrl);
     activeJobs = parseJobData(jobData);
-    populateJobCount(activeJobs);
-    renderTable(activeJobs);
+    applyFilters(activeJobs);
   } catch (error) {
     console.error("Error loading sheet:", error);
   }
@@ -52,6 +51,7 @@ function applyFilters(items) {
   const filteredItems = filterItems(items, criteria);
   renderTable(filteredItems);
   populateJobCount(filteredItems);
+  populateMinMaxSalary(filteredItems);
 }
 
 function getFilterCriteria() {
@@ -109,6 +109,35 @@ function replaceUnderscoresInRow(row) {
 
 function populateJobCount(jobList) {
   document.getElementById("job-count").innerText = jobList.length;
+}
+
+function populateMinMaxSalary(jobList) {
+  const rangeElement = document.getElementById("pay-range");
+  let min = Infinity;
+  let max = -Infinity;
+
+  jobList.forEach((job) => {
+    const salary = parseDollar(job[5]);
+
+    if (salary < min) min = salary;
+    if (salary > max) max = salary;
+  });
+
+  rangeElement.innerText = `${formatDollar(min)} - ${formatDollar(max)}`;
+}
+
+function parseDollar(str) {
+  return parseFloat(str.replace(/[$,]/g, ""));
+}
+
+function formatDollar(amount) {
+  return (
+    "$" +
+    amount.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+  );
 }
 
 function renderTable(tableItems) {
