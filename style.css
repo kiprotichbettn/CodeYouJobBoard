@@ -496,3 +496,48 @@ helpful-links-top {
     padding: 2px 6px;
   }
 }
+
+@media (max-width: 480px) {
+  /* Hide all columns by default */
+  .job-table th,
+  .job-table td {
+    display: none;
+    padding: 6px 4px;
+  }
+
+  /* Show only Employer (2), Job Title (3), Language (5), Salary Range (6), Apply (9) */
+  .job-table th:nth-child(2),
+  .job-table td:nth-child(2), 
+  .job-table th:nth-child(3),
+  .job-table td:nth-child(3), 
+  .job-table th:nth-child(5),
+  .job-table td:nth-child(5),
+  .job-table th:nth-child(6),
+  .job-table td:nth-child(6),
+  .job-table th:nth-child(9),
+  .job-table td:nth-child(9)
+  {
+    display: table-cell;
+  }
+
+  .pagination-controls {
+    font-size: 0.9rem;
+    flex-direction: row;
+    gap: 5px;
+  }
+
+  .filter-group {
+    flex-direction: column;
+  }
+
+  .search-bar {
+    max-width: 80%;
+    font-size: 0.9rem;
+    padding: 10px 15px;
+  }
+
+  .stats {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
