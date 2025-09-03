@@ -164,7 +164,7 @@ footer {
 .stats {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  margin: 20px;
   gap: 30px;
   flex-wrap: wrap;
 }
@@ -240,7 +240,7 @@ footer {
   background: var(--b-blue);
   color: var(--white);
   padding: 15px 12px;
-  text-align: left;
+  text-align: center;
   font-weight: 600;
   border: none;
   position: sticky;
@@ -263,6 +263,7 @@ footer {
 
 .job-table tr {
   transition: all 0.3s ease;
+  background: var(--black-cherry);
 }
 
 .job-table tr:hover {

@@ -26,6 +26,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const jobData = await fetchJobData(sheetUrl);
     activeJobs = parseJobData(jobData);
     applyFilters(activeJobs);
+    activeJobs = parseJobData(jobData);
+    applyFilters(activeJobs);
+    updateStats(activeJobs);
   } catch (error) {
     console.error("Error loading sheet:", error);
   }
@@ -282,4 +285,48 @@ function getPaginationRange(current, total) {
   }
 
   return rangeWithDots;
+}
+
+function updateStats(jobs) {
+  const jobCountEl = document.getElementById("job-count");
+  const payRangeEl = document.getElementById("pay-range");
+  const skillsEl = document.getElementById("skills-list"); // update HTML to wrap skills
+
+  // Number of jobs (within last 30 days)
+  const now = new Date();
+  const recentJobs = jobs.filter(row => {
+    const postedDate = new Date(row[3]); // assume column 4 = PostedDate
+    const diffDays = (now - postedDate) / (1000 * 60 * 60 * 24);
+    return diffDays <= 30;
+  });
+  jobCountEl.textContent = recentJobs.length;
+
+  // Pay range
+  const salaries = jobs
+    .map(row => parseInt(row[4])) // assume column 5 = Salary
+    .filter(val => !isNaN(val));
+  
+  if (salaries.length > 0) {
+    const minSalary = Math.min(...salaries);
+    const maxSalary = Math.max(...salaries);
+    payRangeEl.textContent = `Min: $${minSalary.toLocaleString()} - Max: $${maxSalary.toLocaleString()}`;
+  } else {
+    payRangeEl.textContent = "No salary data";
+  }
+
+  // Skills counts
+  const skillCounts = {};
+  jobs.forEach(row => {
+    const skill = row[4]; // assume column 7 = Language
+    if (skill) {
+      skillCounts[skill] = (skillCounts[skill] || 0) + 1;
+    }
+  });
+
+  // Turn into a display string
+  const skillsText = Object.entries(skillCounts)
+    .map(([skill, count]) => `${skill} ${count}`)
+    .join(", ");
+
+  skillsEl.textContent = skillsText;
 }

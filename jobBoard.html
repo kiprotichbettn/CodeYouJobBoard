@@ -31,7 +31,16 @@
 
     <div class="container">
       <div class="header">
+        
         <h1>Job Listings</h1>
+
+        <div class="search-section">
+          <input
+            type="text"
+            class="search-bar"
+            placeholder="Search jobs by title, company, or skills"
+            id="searchInput"/>
+<!-- 
         <div class="stats">
           <div class="stat-item">
             <strong>Number of jobs:</strong>&nbsp;<span id="job-count">0</span>
@@ -44,16 +53,23 @@
             <strong>Skills:</strong> Python 24, C# 4, JavaScript 34, PHP 3,
             Excel 30
           </div>
-        </div>
+        </div> -->
+
+        <div class="stats">
+          <div class="stat-item">
+            <strong>Number of jobs:</strong>&nbsp;<span id="job-count">0</span>
+          </div>
+          <div class="stat-item">
+            <strong>Pay range:</strong>
+            <span id="pay-range">Loading...</span>
+          </div>
+          <div class="stat-item">
+            <strong>Skills:</strong>
+            <span id="skills-list">Loading...</span>
+          </div>
       </div>
 
-      <div class="search-section">
-        <input
-          type="text"
-          class="search-bar"
-          placeholder="Search jobs by title, company, or skills"
-          id="searchInput"
-        />
+
 
         <div class="filters">
           <div class="filter-group">
