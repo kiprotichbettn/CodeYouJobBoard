@@ -23,11 +23,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   try {
-    const jobData = await fetchJobData(sheetUrl);
-    activeJobs = parseJobData(jobData);
-    applyFilters(activeJobs);
-    // job stats
-    activeJobs = parseJobData(jobData);
+    const csvText = await fetchJobData(sheetUrl);
+    const jobData = parseJobData(csvText).jobs;
+    activeJobs = parseJobData(csvText).jobs;
     applyFilters(activeJobs);
     updateStats(activeJobs);
   } catch (error) {
@@ -45,24 +43,81 @@ async function fetchJobData(url) {
 }
 
 function parseJobData(data) {
-  let result;
+  let result = {};
 
-  result = data
+  const jobData = data
     .trim()
     .split(/\r?\n/)
     .map(parseCSVLine)
     .filter((row) => row.length)
     .map((row) => row.filter((cell) => cell !== ""))
-    .map(replaceUnderscoresInRow)
-    .filter((row) => row[8].trim().toLowerCase() === "false");
+    .map(replaceUnderscoresInRow);
+  // .filter((row) => row[8].trim().toLowerCase() === "false");
+  const headers = [...jobData[0]];
+  const jobs = createJobs(headers, jobData.slice(1));
+
+  result.tableHeaders = [...jobData[0]];
+  result.jobs = [...jobData.slice(1)];
 
   return result;
+}
+
+function createJobs(keys, jobData) {
+  const result = [];
+
+  jobData.forEach((job) => {
+    const parsedJob = {};
+
+    keys.forEach((key, index) => {
+      if (key.trim().toLowerCase() === "date") {
+        parsedJob[key] = parseDate(job[index]);
+      } else if (key.trim().toLowerCase() === "deactivate?") {
+        // Convert the deactivate? field to an actual boolean
+        if (job[index].trim().toLowerCase() === "false") {
+          parsedJob[key] = false;
+        } else {
+          parsedJob[key] = true;
+        }
+      } else if (key.trim().toLowerCase().includes("salary")) {
+        // Parse the salary values to floats
+        const salaryRange = job[index].trim().replace(/[$,]/g, "").split("-");
+        const min = parseFloat(salaryRange[0].trim());
+        const max =
+          salaryRange.length > 1 ? parseFloat(salaryRange[1].trim()) : null;
+
+        parsedJob[key] = { min, max };
+      } else {
+        parsedJob[key] = job[index].trim();
+      }
+    });
+
+    result.push(parsedJob);
+  });
+
+  return result;
+}
+
+function parseDate(str) {
+  const regex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/(\d{4})$/;
+  const match = str.match(regex);
+  if (!match) return null;
+
+  const [, mm, dd, yyyy] = match;
+  const date = new Date(`${yyyy}-${mm}-${dd}T00:00:00`);
+
+  if (date.getMonth() + 1 !== parseInt(mm) || date.getDate() !== parseInt(dd)) {
+    return null;
+  }
+
+  return date;
 }
 
 function applyFilters(items) {
   currentPage = 1;
   const criteria = getFilterCriteria();
   const filteredItems = filterItems(items, criteria);
+
+  const tableHeaders = [...items[0]];
   renderTable(filteredItems);
   populateJobCount(filteredItems);
   populateMinMaxSalary(filteredItems);
@@ -292,11 +347,11 @@ function getPaginationRange(current, total) {
 function updateStats(jobs) {
   const jobCountEl = document.getElementById("job-count");
   const payRangeEl = document.getElementById("pay-range");
-  const skillsEl = document.getElementById("skills-list"); 
+  const skillsEl = document.getElementById("skills-list");
 
   // Number of jobs (within last 30 days)
   const now = new Date();
-  const recentJobs = jobs.filter(row => {
+  const recentJobs = jobs.filter((row) => {
     const postedDate = new Date(row[0]);
     const diffDays = (now - postedDate) / (1000 * 60 * 60 * 24);
     return diffDays <= 30;
@@ -305,9 +360,9 @@ function updateStats(jobs) {
 
   // Pay range
   const salaries = jobs
-    .map(row => parseInt(row[5].replace(/[$,]/g, '')))
-    .filter(val => !isNaN(val));
-  
+    .map((row) => parseInt(row[5].replace(/[$,]/g, "")))
+    .filter((val) => !isNaN(val));
+
   if (salaries.length > 0) {
     const minSalary = Math.min(...salaries);
     const maxSalary = Math.max(...salaries);
@@ -318,7 +373,7 @@ function updateStats(jobs) {
 
   // Skills counts
   const skillCounts = {};
-  jobs.forEach(row => {
+  jobs.forEach((row) => {
     const skill = row[4];
     if (skill) {
       skillCounts[skill] = (skillCounts[skill] || 0) + 1;
