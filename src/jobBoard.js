@@ -272,6 +272,8 @@ function renderHeader(tableEl, headers, tableItems) {
 
     const th = document.createElement("th");
     th.textContent = header;
+    th.classList.add("no-select");
+
     if (header === sortState.key) {
       th.textContent += sortState.direction === "asc" ? " ▲" : " ▼";
     }
@@ -409,9 +411,9 @@ function updateJobStats(jobs) {
       maxSalary = maxSalary = Math.max(maxSalary, job["Salary Range"].max);
     }
   });
-  payRangeEl.textContent = `Min: ${formatDollar(
-    minSalary
-  )} - Max: ${formatDollar(maxSalary)}`;
+  payRangeEl.textContent = `${formatDollar(minSalary)} - ${formatDollar(
+    maxSalary
+  )}`;
 
   // Get skill counts
   const skillCounts = {};
