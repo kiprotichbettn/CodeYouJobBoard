@@ -57,9 +57,6 @@ function parseJobData(data) {
     .map((row) => row.filter((cell) => cell !== ""))
     .map(replaceUnderscoresInRow);
 
-  const headers = [...jobData[0]];
-  const jobs = createJobs(headers, jobData.slice(1));
-
   result.tableHeaders = [...jobData[0]];
   result.jobs = [...jobData.slice(1)];
 
@@ -246,9 +243,13 @@ function renderTable(tableItems) {
         const min = item[header].min;
         const max = item[header].max;
 
-        td.textContent = `$${min.toLocaleString()}${
-          max ? ` - $${max.toLocaleString}` : ""
+        td.textContent = `${formatDollar(min)}${
+          max ? ` - ${formatDollar(max)}` : ""
         }`;
+      }
+
+      if (lowerHeader.includes("language")) {
+        td.textContent = item[header].join(", ");
       }
 
       tr.appendChild(td);
@@ -264,7 +265,7 @@ function renderTable(tableItems) {
 function renderHeader(tableEl, headers, tableItems) {
   const thead = document.createElement("thead");
   const tr = document.createElement("tr");
-  const sortableColumns = [0, 1, 2, 3, 5, 7];
+  const sortableColumns = [0, 1, 2, 3, 5, 6, 7];
 
   headers.forEach((header, colIndex) => {
     if (header.trim().toLowerCase().includes("deactivate")) return;
@@ -408,7 +409,9 @@ function updateJobStats(jobs) {
       maxSalary = maxSalary = Math.max(maxSalary, job["Salary Range"].max);
     }
   });
-  payRangeEl.textContent = `Min: $${minSalary.toLocaleString()} - Max: $${maxSalary.toLocaleString()}`;
+  payRangeEl.textContent = `Min: ${formatDollar(
+    minSalary
+  )} - Max: ${formatDollar(maxSalary)}`;
 
   // Get skill counts
   const skillCounts = {};

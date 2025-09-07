@@ -471,7 +471,7 @@ helpful-links-top {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-} 
+}
 
 .staff-content {
   flex: 1 1 calc(33.333% - 20px);
@@ -483,7 +483,7 @@ helpful-links-top {
   max-width: 250px;
   min-width: 150px;
   margin: 10px;
-} 
+}
 
 .staff-photo {
   width: 100px;
