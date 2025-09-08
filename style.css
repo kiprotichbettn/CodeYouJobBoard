@@ -480,6 +480,7 @@ footer {
 .staff-cards {
   background-color: var(--bg-5);
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
 }
