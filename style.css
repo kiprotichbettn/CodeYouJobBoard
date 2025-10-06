@@ -553,6 +553,17 @@ footer {
   display: none;
 }
 
+td a {
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+td a:visited {
+  color: var(--b-yellow);
+}
+
 @media (max-width: 1200px) {
   .job-table {
     font-size: 0.8rem;
