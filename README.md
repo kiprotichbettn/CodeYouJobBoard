@@ -1,6 +1,21 @@
 # Code:You Job Board
 
-## Update with instructions on how to run the project etc as we go 
+## Update with instructions on how to run the project
+
+## ToDos
+
+- **Clean up:** some styles like border radius is not the same on whole project. 
+- **Documentation:** Add it to the project as its lacking documentation in the whole project. 
+    - Everyone pick a section and claim it in slack and document the section you claim. 
+    - We need code documentation for each section 
+    - [Example of DOC](https://gomakethings.com/whats-the-best-way-to-document-javascript/)
+    - Once you your section have a team mate review it. 
+- **Make a how to:** For posting of the jobs. 
+- **Put in Real Jobs:** Put in jobs from Slack so that we can verify we have everything we need. 
+- **find a BackGround:** Add a background that has some geometric shapes or something with the blue.  
+- **Mongo DB:** Everyone should make a mongoDB and connect to it. 
+- **Mongo DB:** Convert project to mongo! 
+
 
 ## links 
 
