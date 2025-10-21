@@ -529,13 +529,13 @@ footer {
 }
 
 .hamburger {
-  font-size: 3rem;
+  font-size: 1rem;
   position: fixed;
   top: 10px;
   right: 10px;
   display: none;
-  width: 5rem;
-  height: 5rem;
+  width: 2rem;
+  height: 2rem;
   background-color: var(--black-cherry);
   color: var(--bg-5);
   justify-content: center;
