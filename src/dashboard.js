@@ -207,39 +207,54 @@ function toggleSelectValue(selectId, value) {
 function createJobs(keys, jobData) {
   const result = [];
 
-  jobData.forEach((job) => {
+  jobData.forEach((job, rowIndex) => {  // Added rowIndex for logging
     const parsedJob = {};
-    if (job.length < 9) return;
+    
+    // Hotfix: Skip if row is shorter than expected columns
+    if (job.length < keys.length) {
+      console.warn(`Skipping malformed row ${rowIndex + 2}: Expected ${keys.length} columns, got ${job.length}`, job);  // +2 assumes header + 1-based
+      return;
+    }
 
     keys.forEach((key, index) => {
+      const cellValue = job[index];  // Raw cell
+      if (cellValue === undefined || cellValue === null) {
+        // Safeguard: Default to empty for missing cells (rare if length check passes)
+        parsedJob[key] = '';
+        console.warn(`Empty cell at row ${rowIndex + 2}, col ${index} (${key})`);
+        return;
+      }
+
       const trimmedKey = key.trim();
+      const trimmedCell = String(cellValue).trim();  // Safe trim
+
       if (trimmedKey.toLowerCase() === "date") {
-        parsedJob[key] = parseDate(job[index]);
+        parsedJob[key] = parseDate(trimmedCell);
       } else if (trimmedKey.toLowerCase() === "deactivate?") {
         // Convert the deactivate? field to an actual boolean
-        if (job[index].trim().toLowerCase() === "false") {
-          parsedJob[key] = false;
-        } else {
-          parsedJob[key] = true;
-        }
+        parsedJob[key] = trimmedCell.toLowerCase() !== "false";
       } else if (trimmedKey.toLowerCase().includes("salary")) {
         // Parse the salary values to floats
-        const salaryRange = job[index].trim().replace(/[$,]/g, "").split("-");
-        const min = parseFloat(salaryRange[0].trim());
-        const max =
-          salaryRange.length > 1 ? parseFloat(salaryRange[1].trim()) : null;
+        const salaryRange = trimmedCell.replace(/[$,]/g, "").split("-");
+        const min = parseFloat(salaryRange[0].trim()) || null;
+        const max = salaryRange.length > 1 ? parseFloat(salaryRange[1].trim()) || null : null;
+        const avg = (min + (max || min)) / 2;
 
-        parsedJob[key] = { min, max, avg: (min + (max || min)) / 2 };
+        parsedJob[key] = { min, max, avg };
       } else if (trimmedKey.toLowerCase() === "language") {
-        parsedJob[key] = job[index].split(",");
+        parsedJob[key] = trimmedCell.split(",").map(lang => lang.trim()).filter(lang => lang);
       } else {
-        parsedJob[key] = job[index].trim();
+        parsedJob[key] = trimmedCell;
       }
     });
 
-    result.push(parsedJob);
+    // Only add if we parsed at least one field (avoids empty objects)
+    if (Object.keys(parsedJob).length > 0) {
+      result.push(parsedJob);
+    }
   });
 
+  console.log(`Processed ${result.length} valid jobs from ${jobData.length} input rows`);
   return result;
 }
 
