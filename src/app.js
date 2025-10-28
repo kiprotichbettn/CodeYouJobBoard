@@ -1,3 +1,16 @@
+/**
+ * @file app.js
+ * @description
+ * Main server file for the Code:YouJobBoard project.
+ * Sets up an Express server to serve static files and provide
+ * an API endpoint that retrieves job data from a Mongo DB.
+ *
+ * @requires express
+ * @requires path
+ * @requires mongoose
+ * @requires dotenv
+ */
+
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -5,7 +18,18 @@ require('dotenv').config();
 
 const Job = require('./models/Job'); //  Import external Job model
 
+/**
+ * Create an Express application instance.
+ * @type {import('express').Express}
+ */
 const app = express();
+
+/**
+ * Port configuration for the server.
+ * Uses environment variable `PORT` if available,
+ * otherwise defaults to 3000.
+ * @constant {number}
+ */
 const PORT = process.env.PORT || 3000;
 
 // ✅ Parse JSON bodies for POST requests
@@ -59,7 +83,7 @@ app.post('/api/jobs', async (req, res) => {
   console.log('Using API Key:', API_KEY ? 'Found' : 'Missing');
   console.log('Using Spreadsheet ID:', spreadsheetId ? 'Found' : 'Missing');
 
-  // Dynamic range for the Sheets API. Currently, A:I are the in-use columns
+  // Dynamic range for the Sheets API — A:I are currently used columns.
   const range = encodeURIComponent(req.query.range || 'JobBoard!A:I');
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?majorDimension=COLUMNS&key=${API_KEY}`;
 
@@ -72,6 +96,10 @@ app.post('/api/jobs', async (req, res) => {
   }
 }); */
 
+/**
+ * Starts the Express server.
+ * Logs a confirmation message with the local server URL.
+ */
 app.listen(PORT, () => {
-  console.log('Server started at http://localhost:' + PORT);
+  console.log(`✅ Server started at http://localhost:${PORT}`);
 });
