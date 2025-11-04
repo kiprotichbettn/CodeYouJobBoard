@@ -48,7 +48,18 @@ async function fetchJobData(url) {
 
 function parseJobData(data) {
   let result = {};
-
+/** Defines jobData variable.
+ * Defines how job data is displayed, makes sure if there are extra spaces that it can read and parse and display it correctly still.
+ * trim() makes sure to trim/remove the whitespace before and after the input string.
+ * split(/\r?\n/): Splits the string into an array of lines. It accounts for both Windows (\r\n) and Unix (\n) line endings.
+ * .map(parseCSVLine): Applies the parseCSVLine function to each line, parsing it into an array of cells.
+ * .filter((row) => row.length): Filters out any rows that are empty.
+ * .map((row) => row.filter((cell) => cell !== "")): Removes empty cells from each row.
+ * .filter((row) => row.length >= 9): Keeps only rows that have at least 9 cells.
+ * .map(replaceUnderscoresInRow): Applies the replaceUnderscoresInRow function to each row. This replaces underscores with spaces or other characters for legibility.
+ * result.tableHeaders = [...jobData[0]];: Assigns the first row of jobData (headers) to result.tableHeaders.
+ * result.jobs = [...jobData.slice(1)];: Assigns all rows except the first (the actual job data) to result.jobs.
+ */
   const jobData = data
     .trim()
     .split(/\r?\n/)
@@ -137,12 +148,40 @@ function parseDate(str) {
 }
 
 function refreshView(items) {
-  currentPage = 1;
-  const filteredItems = applyFilters(items);
+ /**
+ * Current page number in the pagination system.
+ * @type {number}
+ */
+let currentPage = 1;
 
-  sortItems(filteredItems, sortState);
-  renderTable(filteredItems);
-  updateJobStats(filteredItems);
+/**
+ * Filters the list of items based on predefined criteria.
+ * @param {Array} items - The full list of items to filter.
+ * @returns {Array} The filtered list of items.
+ */
+const filteredItems = applyFilters(items);
+
+/**
+ * Sorts the filtered items based on the current sort state.
+ * @param {Array} items - The list of filtered items.
+ * @param {Object} sortState - The current sorting configuration.
+ * @returns {void}
+ */
+sortItems(filteredItems, sortState);
+
+/**
+ * Renders the filtered and sorted items into a table view.
+ * @param {Array} items - The list of items to render.
+ * @returns {void}
+ */
+renderTable(filteredItems);
+
+/**
+ * Updates job statistics based on the current list of items.
+ * @param {Array} items - The list of items used to calculate stats.
+ * @returns {void}
+ */
+updateJobStats(filteredItems);
 }
 
 function applyFilters(items) {
