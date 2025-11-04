@@ -10,12 +10,21 @@
       id="jobForm"
       action="https://script.google.com/macros/s/AKfycbzwlPYcOFv6npeUz4K3mSQwCcKRRhDemaHcsHCFRbXSFvri25zwI1WaVTH8EXqz_WU2ug/exec"
       method="POST"
-      target="hidden_iframe"
-    >
-      <label>Employer: <input type="text" name="employer" required /></label
-      ><br /><br />
-      <label>Job Title: <input type="text" name="jobTitle" required /></label
-      ><br /><br />
+      target="hidden_iframe">
+      <label>Employer: 
+        <input 
+        type="text"
+        name="employer"
+        required />
+      </label>
+      <br /><br />
+      <label>Job Title: 
+        <input 
+        type="text"
+        name="jobTitle"
+        required />
+        </label>
+        <br /><br />
       <label
         >Pathway:
         <select name="pathway" required>
@@ -23,8 +32,9 @@
           <option value="Web">Web</option>
           <option value="Data">Data</option>
           <option value="PHP">PHP</option>
-        </select> </label
-      ><br /><br />
+        </select> 
+      </label>
+      <br /><br />
       <label
         >Language:
         <input
@@ -33,20 +43,31 @@
           placeholder="e.g. Python, JavaScript"
           required /></label
       ><br /><br />
-      <label
-        >Salary Range:
+      <label>Salary Range:
         <input
           type="text"
           name="salaryRange"
           placeholder="$70,000 - $90,000"
-          required /></label
-      ><br /><br />
-      <label>Contact Person: <input type="text" name="contactPerson" /></label
-      ><br /><br />
-      <label>Location: <input type="text" name="location" /></label><br /><br />
-      <label
-        >Application Link: <input type="text" name="apply" required /></label
-      ><br /><br />
+          required />
+      </label>
+      <br /><br />
+      <label>Contact Person: 
+        <input type="text" 
+        name="contactPerson" />
+      </label>
+      <br /><br />
+      <label>Location: 
+        <input type="text"
+        name="location" />
+      </label>
+      <br /><br />
+      <label>Application Link: 
+        <input 
+        type="text"
+        name="apply"
+        required />
+      </label>
+      <br /><br />
 
       <button type="submit">Submit Job</button>
     </form>
