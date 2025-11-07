@@ -190,6 +190,19 @@ function applyFilters(items) {
   return filterItems(items, criteria);
 }
 
+/**
+ * Retrieves and trims filter criteria from DOM input elements.
+ * This function collects user-entered values for search, pathway, and location filters,
+ * trims any leading/trailing whitespace, and returns them as an object.
+ * 
+ * @returns {Object} An object containing the trimmed filter values:
+ *                   - searchTerm: string from #searchInput
+ *                   - pathway: string from #pathwayFilter
+ *                   - location: string from #locationFilter
+ * @example
+ * const criteria = getFilterCriteria();
+ * // criteria = { searchTerm: "engineer", pathway: "Python", location: "Eastern KY" }
+ */
 function getFilterCriteria() {
   const result = {
     searchTerm: document.getElementById("searchInput").value.trim(),
