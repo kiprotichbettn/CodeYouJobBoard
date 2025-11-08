@@ -111,4 +111,78 @@
  * - Tables use `.no-display` and `.job-data-status` for load-state toggling.
  * - Future enhancement: add sorting and “save job” functionality.
  */
+ 
+
+## dashboard.html
+/**
+ * @file dashboard.html
+ * @description Interactive analytics dashboard for the CODE:You Job Board project.
+ * Displays charts, filters, and tabular summaries of job data retrieved from the backend API.
+ *
+ * @section Overview
+ * The Dashboard page visualizes job listings data from the API (Google Sheets or MongoDB),
+ * providing users with real-time insights such as job counts, salary ranges, and distributions
+ * by programming language and location. It includes dynamic charts powered by Chart.js
+ * and allows filtering by date, location, language, and salary.
+ *
+ * @section Layout
+ * - **Aside Navigation:**
+ *   - Displays Code:You logos and main nav links.
+ *   - Highlights "Dashboard" as the active page.
+ *   - Includes a tip reminding users they can click chart slices to filter results.
+ *
+ * - **Header Section:**
+ *   - Page title (“Jobs Dashboard”) and short description.
+ *
+ * - **Date Range Section:**
+ *   - "From" and "To" date pickers for filtering jobs by posting date.
+ *   - Inline warning (`#dateWarning`) for invalid ranges.
+ *   - Loading overlay (`#loadingOverlay`) displayed while initializing charts and data.
+ *   - Displays current job count dynamically.
+ *
+ * - **Filters Row:**
+ *   - Drop-down menus for filtering by Language, Location, and Salary.
+ *   - "Clear All Filters" button resets all filters and refreshes results.
+ *
+ * - **Charts Section:**
+ *   - Grid layout containing three Chart.js visualizations:
+ *     1. **Pie Chart:** Job count by Location (`#pieChart`)
+ *     2. **Donut Chart:** Programming language breakdown (`#donutChart`)
+ *     3. **Bar Chart:** Salary distribution (`#barChart`)
+ *
+ * - **Table Section:**
+ *   - Mirrors the `jobBoard.html` table design.
+ *   - Populated dynamically via `dashboard.js`.
+ *   - Table headers (`#dashboardTableHeadRow`) and rows (`#dashboardJobTableBody`)
+ *     generated from the live dataset.
+ *   - Includes pagination controls and data status messages.
+ *
+ * - **Footer:**
+ *   - Standard © 2025 Code:You notice and responsive hamburger menu.
+ *
+ * @section Assets
+ * - **Images:**
+ *   - `/assets/imgs/cy-logo-dstacked-color.png`
+ *   - `/assets/imgs/cy-logo-horz-color.png`
+ *
+ * @dependencies
+ * - **CSS:** `/public/style.css`
+ * - **Fonts:** Google Fonts (Roboto, Share Tech Mono)
+ * - **Icons:** Font Awesome 6.5.0
+ * - **Libraries:**
+ *   - Chart.js (CDN)
+ *   - chartjs-plugin-datalabels v2.2.0
+ * - **JavaScript:**
+ *   - `/src/menu.js` (handles navigation)
+ *   - `/src/dashboard.js` (fetches data and renders charts)
+ *
+ * @data
+ * - Job data fetched from the backend `/api/sheet` or database.
+ * - Chart.js datasets update automatically based on active filters.
+ *
+ * @note
+ * - Ensure the Chart.js plugin is loaded before `dashboard.js`.
+ * - Users can click chart slices to apply quick filters interactively.
+ * - Accessibility: `aria-live` and `aria-hidden` attributes used for dynamic regions.
+ */
 
