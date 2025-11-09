@@ -111,7 +111,7 @@
  * - Tables use `.no-display` and `.job-data-status` for load-state toggling.
  * - Future enhancement: add sorting and “save job” functionality.
  */
- 
+
 
 ## dashboard.html
 /**
@@ -182,7 +182,64 @@
  *
  * @note
  * - Ensure the Chart.js plugin is loaded before `dashboard.js`.
- * - Users can click chart slices to apply quick filters interactively.
  * - Accessibility: `aria-live` and `aria-hidden` attributes used for dynamic regions.
  */
+
+ ## 
+
+ /**
+ * @file jobSubmission.html
+ * @description Job submission form for the CODE:You Job Board project. 
+ * Allows employers or administrators to add new job listings directly to 
+ * the connected Google Sheet through a Google Apps Script endpoint.
+ *
+ * @section Overview
+ * The Job Submission page provides a simple, styled HTML form that collects 
+ * job listing data such as employer, title, pathway, salary range, and 
+ * contact information. When submitted, the form sends data to a Google Apps 
+ * Script (`/exec` URL), which automatically updates the master job listings 
+ * sheet.
+ *
+ * @section Layout
+ * - **Form (id="jobForm"):**
+ *   - Contains labeled input fields for:
+ *     - Employer (text, required)
+ *     - Job Title (text, required)
+ *     - Pathway (dropdown: Software, Web, Data, PHP)
+ *     - Language (text, required)
+ *     - Salary Range (text, required)
+ *     - Contact Person (optional)
+ *     - Location (optional)
+ *     - Application Link (required)
+ *   - Submit button triggers a POST request to the Google Apps Script endpoint.
+ *   - Uses a hidden `<iframe>` (`name="hidden_iframe"`) to prevent page reload after submission.
+ *
+ * @section Behavior
+ * - Includes a small inline `<script>` that:
+ *   1. Listens for the form submission event.
+ *   2. Displays an alert ("Form submitted! Check your Google Sheet.") after a short delay.
+ *   3. Resets the form fields after submission.
+ *
+ * @section Styles
+ * - Defined directly within the `<style>` tag at the bottom of the file.
+ * - Applies a clean, card-like form layout with the following features:
+ *   - Centered form with a maximum width of 600px.
+ *   - Soft shadow and rounded corners.
+ *   - Gradient submit button with hover elevation.
+ *   - Responsive adjustments for screens under 768px.
+ *
+ * @section Accessibility
+ * - Uses clear label associations for all input fields.
+ * - Color variables reference global CSS custom properties where available.
+ * - Responsive layout ensures mobile usability.
+ *
+ * @dependencies
+ * - Google Apps Script endpoint for job submissions:
+ *   https://script.google.com/macros/s/AKfycbzwlPYcOFv6npeUz4K3mSQwCcKRRhDemaHcsHCFRbXSFvri25zwI1WaVTH8EXqz_WU2ug/exec
+ *
+ * @note
+ * - The Google Sheet integration must be active and accessible for successful submissions.
+ * - Consider converting it to MongoDB.
+ */
+
 
