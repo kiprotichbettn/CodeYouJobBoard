@@ -15,6 +15,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 require('dotenv').config();
+const axios = require('axios');
 
 // Import the Job model
 const Job = require('../models/Job');
@@ -41,13 +42,15 @@ mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('✅ Connected to MongoDB via Mongoose'))
-.catch(err => console.error('❌ MongoDB connection error:', err));
+  .then(() => console.log('✅ Connected to MongoDB via Mongoose'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
 
 /**
  * Middleware for serving static files.
  * Serves all files from the `public` directory.
  */
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '..')));
 
 /**
@@ -71,9 +74,9 @@ app.get('/', (req, res) => {
  */
 app.get('/api/sheet', async (req, res) => {
   try {
-    
+
     const jobs = await Job.find().lean();
-   
+
 
     // Transform to match expected format (array of arrays, like Google Sheets)
     const headers = ['Date', 'Employer', 'Job Title', 'Pathway', 'Language', 'Salary Range', 'Contact Person', 'Location', 'Deactivate?', 'Apply'];
@@ -101,6 +104,81 @@ app.get('/api/sheet', async (req, res) => {
   } catch (error) {
     console.error('Mongoose error:', error);
     res.status(500).json({ error: 'Error fetching data from MongoDB' });
+  }
+});
+
+app.post('/api/jobs', async (req, res) => {
+  try {
+    const {
+      employer,
+      jobTitle,
+      pathway,
+      language,
+      salaryRange,
+      contactPerson,
+      location,
+      apply
+    } = req.body;
+
+    // Parse salary "$70,000 - $90,000" into min/max/avg like dashboard/jobBoard do
+    let min = null, max = null, avg = null;
+    if (salaryRange) {
+      const parts = salaryRange.replace(/[$,]/g, '').split('-');
+      min = parseFloat(parts[0]?.trim()) || null;
+      if (parts.length > 1) {
+        max = parseFloat(parts[1]?.trim()) || null;
+      }
+      if (min != null) {
+        avg = (min + (max || min)) / 2;
+      }
+    }
+
+    const job = new Job({
+      Date: new Date(),                       // use "now" as posted date
+      Employer: employer,
+      'Job Title': jobTitle,
+      Pathway: pathway,
+      Language: String(language)
+        .split(',')
+        .map(l => l.trim())
+        .filter(Boolean),
+      'Salary Range': { min, max, avg },
+      'Contact Person': contactPerson || '',
+      Location: location || '',
+      'Deactivate?': false,
+      Apply: apply
+    });
+
+    await job.save();
+
+    // Submit to Google Sheets
+    const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbzwlPYcOFv6npeUz4K3mSQwCcKRRhDemaHcsHCFRbXSFvri25zwI1WaVTH8EXqz_WU2ug/exec';
+
+    try {
+      await axios.post(googleScriptUrl, new URLSearchParams({
+        employer,
+        jobTitle,
+        pathway,
+        language,
+        salaryRange,
+        contactPerson,
+        location,
+        apply
+      }).toString(), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      console.log('✅ Submitted to Google Sheets');
+    } catch (sheetErr) {
+      console.error('❌ Error submitting to Google Sheets:', sheetErr.message);
+      // We don't fail the request if this fails, as MongoDB save was successful
+    }
+
+    res.status(201).json({ success: true, message: 'Job submitted successfully' });
+  } catch (err) {
+    console.error('Error saving job:', err);
+    res.status(500).send('Error saving job');
   }
 });
 
