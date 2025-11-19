@@ -6,11 +6,7 @@
     <title>Job Submission</title>
   </head>
   <body>
-    <form
-      id="jobForm"
-      action="https://script.google.com/macros/s/AKfycbzwlPYcOFv6npeUz4K3mSQwCcKRRhDemaHcsHCFRbXSFvri25zwI1WaVTH8EXqz_WU2ug/exec"
-      method="POST"
-      target="hidden_iframe">
+    <form id="jobForm">
       <label>Employer: 
         <input 
         type="text"
@@ -72,19 +68,35 @@
       <button type="submit">Submit Job</button>
     </form>
 
-    <iframe name="hidden_iframe" style="display: none"></iframe>
-
     <script>
-      // This simple script just gives the user feedback after submission.
-      document
-        .getElementById("jobForm")
-        .addEventListener("submit", function () {
-          setTimeout(function () {
-            alert("Form submitted! Check your Google Sheet.");
-            // Optionally, you can reset the form after a short delay
-            document.getElementById("jobForm").reset();
-          }, 1000); // 1-second delay
-        });
+      document.getElementById("jobForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+          const response = await fetch('/api/jobs', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            alert("Job submitted successfully!");
+            this.reset();
+          } else {
+            alert("Error submitting job: " + (result.error || "Unknown error"));
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert("An error occurred while submitting the job.");
+        }
+      });
     </script>
   </body>
 </html>
