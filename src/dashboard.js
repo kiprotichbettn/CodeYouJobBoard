@@ -241,33 +241,6 @@ function parseJobData(values) {
 }
 
 // Needs to be removed? Not used anywhere.
-/**
- * Parse a CSV line, handling quotes.
- * @param {string} line - The CSV line to parse.
- * @returns {Array<string>} - The parsed cells.
- */
-// function parseCSVLine(line) {
-//   const result = [];
-//   let current = '';
-//   let inQuotes = false;
-
-//   for (let i = 0; i < line.length; i++) {
-//     const char = line[i];
-//     if (char === '"') {
-//       // Toggle inQuotes flag when encountering a quote
-//       inQuotes = !inQuotes;
-//     } else if (char === ',' && !inQuotes) {
-//       result.push(current.trim());
-//       current = '';
-//     } else {
-//       current += char;
-//     }
-//   }
-//   result.push(current.trim());
-//   return result;
-// }
-
-// Needs to be removed? Not used anywhere.
 // /**
 //  * Replace underscores with spaces in each cell of a row.
 //  * @param {Array<string>} row - The row of cells.
