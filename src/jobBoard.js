@@ -139,40 +139,34 @@ function parseDate(str) {
 }
 
 function refreshView(items) {
- /**
- * Current page number in the pagination system.
- * @type {number}
- */
-let currentPage = 1;
+  /**
+   * Filters the list of items based on predefined criteria.
+   * @param {Array} items - The full list of items to filter.
+   * @returns {Array} The filtered list of items.
+   */
+  const filteredItems = applyFilters(items);
 
-/**
- * Filters the list of items based on predefined criteria.
- * @param {Array} items - The full list of items to filter.
- * @returns {Array} The filtered list of items.
- */
-const filteredItems = applyFilters(items);
+  /**
+   * Sorts the filtered items based on the current sort state.
+   * @param {Array} items - The list of filtered items.
+   * @param {Object} sortState - The current sorting configuration.
+   * @returns {void}
+   */
+  sortItems(filteredItems, sortState);
 
-/**
- * Sorts the filtered items based on the current sort state.
- * @param {Array} items - The list of filtered items.
- * @param {Object} sortState - The current sorting configuration.
- * @returns {void}
- */
-sortItems(filteredItems, sortState);
+  /**
+   * Renders the filtered and sorted items into a table view.
+   * @param {Array} items - The list of items to render.
+   * @returns {void}
+   */
+  renderTable(filteredItems);
 
-/**
- * Renders the filtered and sorted items into a table view.
- * @param {Array} items - The list of items to render.
- * @returns {void}
- */
-renderTable(filteredItems);
-
-/**
- * Updates job statistics based on the current list of items.
- * @param {Array} items - The list of items used to calculate stats.
- * @returns {void}
- */
-updateJobStats(filteredItems);
+  /**
+   * Updates job statistics based on the current list of items.
+   * @param {Array} items - The list of items used to calculate stats.
+   * @returns {void}
+   */
+  updateJobStats(filteredItems);
 }
 
 function applyFilters(items) {
