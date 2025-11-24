@@ -43,7 +43,7 @@ async function fetchJobData(url) {
     throw new Error(`Failed to load jobs (${response.status})`);
   }
   console.log(response);
-  
+
   const payload = await response.json();
   if (!payload?.values?.length) {
     throw new Error("Job payload missing values array");
@@ -71,7 +71,7 @@ function createJobs(keys, jobData) {
 
   jobData.forEach((job, rowIndex) => {  // Added rowIndex for logging
     const parsedJob = {};
-    
+
     // Hotfix: Skip if row is shorter than expected columns
     if (job.length < keys.length) {
       console.warn(`Skipping malformed row ${rowIndex + 2}: Expected ${keys.length} columns, got ${job.length}`, job);  // +2 assumes header + 1-based
@@ -179,7 +179,7 @@ function applyFilters(items) {
  * Retrieves and trims filter criteria from DOM input elements.
  * This function collects user-entered values for search, pathway, and location filters,
  * trims any leading/trailing whitespace, and returns them as an object.
- * 
+ *
  * @returns {Object} An object containing the trimmed filter values:
  *                   - searchTerm: string from #searchInput
  *                   - pathway: string from #pathwayFilter
@@ -249,25 +249,14 @@ function getSearchResults(itemsToSearch, searchTerm) {
   return result;
 }
 
-// function parseCSVLine(line) {
-//   if (!line.trim()) return []; // skip blank lines
-//   return (
-//     line.match(/("([^"]|"")*"|[^,]*)(?=,|$)/g)?.map((cell) => {
-//       cell = cell.trim();
-//       if (cell.startsWith('"') && cell.endsWith('"')) {
-//         cell = cell.slice(1, -1).replace(/""/g, '"');
-//       }
-//       return cell;
-//     }) || []
-//   );
-// }
+
 
 /**
  * Replaces all underscores in the column of a row array with spaces.
  * This function creates a shallow copy of the input row to avoid mutating the original,
- * modifies only the specified index ("Location" column), and returns the updated array. 
+ * modifies only the specified index ("Location" column), and returns the updated array.
  * - Used during CSV parsing to clean up underscored text in Location field
- * 
+ *
  * @param {Array<string>} row - The array representing a parsed CSV row
  * @returns {Array<string>} A new array with underscores replaced
  * @example
@@ -323,7 +312,7 @@ function renderTable(tableItems) {
   tableBody.id = "jobTableBody";
 
   itemsToDisplay.forEach((item) => {
-    
+
     if (item.length < 9) return;
 
     const tr = document.createElement("tr");
@@ -552,7 +541,7 @@ function getPaginationRange(current, total) {
  * and a comma-separated list of skill counts (aggregated from languages in each job).
  * - Handles edge cases like no jobs or missing salary data by setting fallback text
  * - Relies on formatDollar() for currency formatting
- * 
+ *
  * @param {Array<Object>} jobs - The array of job objects to compute stats from
  * @returns {void} Updates DOM elements directly; no return value
  */
