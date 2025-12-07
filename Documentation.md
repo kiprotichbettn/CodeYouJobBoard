@@ -53,7 +53,7 @@
  * @file jobBoard.html
  * @description Displays the main job listings page for the CODE:You Job Board project. 
  * Provides dynamic filtering, searching, and data visualization for available jobs 
- * retrieved via the backend API (Google Sheets or MongoDB).
+ * retrieved via the backend API (JSON data or MongoDB).
  *
  * @section Overview
  * The Job Board page serves as the central hub where users can view, search, 
@@ -104,7 +104,7 @@
  *   - `/src/jobBoard.js` (fetches and populates job data)
  *
  * @data
- * - Job data is fetched from the backend API endpoint (`/api/sheet` or MongoDB version).
+ * - Job data is fetched from the backend API endpoint (`/api/JSON data` or MongoDB).
  * - Dynamic counts and filters update based on live data.
  *
  * @note
@@ -120,7 +120,7 @@
  * Displays charts, filters, and tabular summaries of job data retrieved from the backend API.
  *
  * @section Overview
- * The Dashboard page visualizes job listings data from the API (Google Sheets or MongoDB),
+ * The Dashboard page visualizes job listings data from the API (JSON data or MongoDB),
  * providing users with real-time insights such as job counts, salary ranges, and distributions
  * by programming language and location. It includes dynamic charts powered by Chart.js
  * and allows filtering by date, location, language, and salary.
@@ -177,7 +177,7 @@
  *   - `/src/dashboard.js` (fetches data and renders charts)
  *
  * @data
- * - Job data fetched from the backend `/api/sheet` or database.
+ * - Job data fetched from the backend `/api/JSON data` or database.
  * - Chart.js datasets update automatically based on active filters.
  *
  * @note
@@ -191,14 +191,14 @@
  * @file jobSubmission.html
  * @description Job submission form for the CODE:You Job Board project. 
  * Allows employers or administrators to add new job listings directly to 
- * the connected Google Sheet through a Google Apps Script endpoint.
+ * the connected JSON data through a Google Apps Script endpoint.
  *
  * @section Overview
  * The Job Submission page provides a simple, styled HTML form that collects 
  * job listing data such as employer, title, pathway, salary range, and 
  * contact information. When submitted, the form sends data to a Google Apps 
- * Script (`/exec` URL), which automatically updates the master job listings 
- * sheet.
+ * Script (`/exec` URL), which automatically updates the master job listings. 
+ * 
  *
  * @section Layout
  * - **Form (id="jobForm"):**
@@ -217,7 +217,7 @@
  * @section Behavior
  * - Includes a small inline `<script>` that:
  *   1. Listens for the form submission event.
- *   2. Displays an alert ("Form submitted! Check your Google Sheet.") after a short delay.
+ *   2. Displays an alert ("Form submitted!.") after a short delay.
  *   3. Resets the form fields after submission.
  *
  * @section Styles
@@ -238,8 +238,8 @@
  *   https://script.google.com/macros/s/AKfycbzwlPYcOFv6npeUz4K3mSQwCcKRRhDemaHcsHCFRbXSFvri25zwI1WaVTH8EXqz_WU2ug/exec
  *
  * @note
- * - The Google Sheet integration must be active and accessible for successful submissions.
- * - Consider converting it to MongoDB.
+ * - The JSON data integration must be active and accessible for successful submissions.
+ * 
  */
 
 
